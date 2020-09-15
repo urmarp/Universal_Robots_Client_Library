@@ -37,6 +37,7 @@
 #include "ur_client_library/ur/tool_communication.h"
 #include "ur_client_library/ur/version_information.h"
 #include "ur_client_library/primary/robot_message/version_message.h"
+#include "ur_client_library/primary/primary_client.h"
 #include "ur_client_library/rtde/rtde_writer.h"
 
 namespace urcl
@@ -247,7 +248,7 @@ public:
    * \returns True if the robot's calibration checksum matches the one given to the checker. False
    * if it doesn't match or the check was not yet performed.
    */
-  bool checkCalibration(const std::string& checksum);
+  // void checkCalibration(const std::string& checksum);
 
   /*!
    * \brief Getter for the RTDE writer used to write to the robot's RTDE interface.
@@ -321,8 +322,10 @@ private:
   std::unique_ptr<control::ReverseInterface> reverse_interface_;
   std::unique_ptr<control::TrajectoryPointInterface> trajectory_interface_;
   std::unique_ptr<control::ScriptSender> script_sender_;
-  std::unique_ptr<comm::URStream<primary_interface::PrimaryPackage>> primary_stream_;
-  std::unique_ptr<comm::URStream<primary_interface::PrimaryPackage>> secondary_stream_;
+
+  primary_interface::PrimaryClient primary_client_;
+  // std::unique_ptr<comm::URStream<primary_interface::PrimaryPackage>> primary_stream_;
+  // std::unique_ptr<comm::URStream<primary_interface::PrimaryPackage>> secondary_stream_;
 
   double servoj_time_;
   uint32_t servoj_gain_;
