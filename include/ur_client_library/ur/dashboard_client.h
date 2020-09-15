@@ -25,8 +25,8 @@
  *
  */
 //----------------------------------------------------------------------
-#ifndef UR_ROBOT_DRIVER_DASHBOARD_CLIENT_DASHBOARD_CLIENT_H_INCLUDED
-#define UR_ROBOT_DRIVER_DASHBOARD_CLIENT_DASHBOARD_CLIENT_H_INCLUDED
+#ifndef UR_CLIENT_LIBRARY_DASHBOARD_CLIENT_DASHBOARD_CLIENT_H_INCLUDED
+#define UR_CLIENT_LIBRARY_DASHBOARD_CLIENT_DASHBOARD_CLIENT_H_INCLUDED
 
 #include <ur_client_library/comm/tcp_socket.h>
 
@@ -98,4 +98,4 @@ private:
   std::mutex write_mutex_;
 };
 }  // namespace urcl
-#endif  // ifndef UR_ROBOT_DRIVER_DASHBOARD_CLIENT_DASHBOARD_CLIENT_H_INCLUDED
+#endif  // ifndef UR_CLIENT_LIBRARY_DASHBOARD_CLIENT_DASHBOARD_CLIENT_H_INCLUDED
