@@ -55,7 +55,8 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
                          std::unique_ptr<ToolCommSetup> tool_comm_setup, const uint32_t reverse_port,
                          const uint32_t script_sender_port, int servoj_gain, double servoj_lookahead_time,
                          bool non_blocking_read, const std::string& reverse_ip, const uint32_t trajectory_port)
-  : servoj_time_(0.008)
+  : primary_client_(robot_ip, calibration_checksum)
+  , servoj_time_(0.008)
   , servoj_gain_(servoj_gain)
   , servoj_lookahead_time_(servoj_lookahead_time)
   , handle_program_state_(handle_program_state)
@@ -248,31 +249,6 @@ std::string UrDriver::readScriptFile(const std::string& filename)
   return content;
 }
 
-bool UrDriver::checkCalibration(const std::string& checksum)
-{
-  if (primary_stream_ == nullptr)
-  {
-    throw std::runtime_error("checkCalibration() called without a primary interface connection being established.");
-  }
-  primary_interface::PrimaryParser parser;
-  comm::URProducer<primary_interface::PrimaryPackage> prod(*primary_stream_, parser);
-  prod.setupProducer();
-
-  CalibrationChecker consumer(checksum);
-
-  comm::INotifier notifier;
-
-  comm::Pipeline<primary_interface::PrimaryPackage> pipeline(prod, &consumer, "Pipeline", notifier);
-  pipeline.run();
-
-  while (!consumer.isChecked())
-  {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-  }
-  URCL_LOG_DEBUG("Got calibration information from robot.");
-  return consumer.checkSuccessful();
-}
-
 rtde_interface::RTDEWriter& UrDriver::getRTDEWriter()
 {
   return rtde_client_->getWriter();
@@ -280,29 +256,7 @@ rtde_interface::RTDEWriter& UrDriver::getRTDEWriter()
 
 bool UrDriver::sendScript(const std::string& program)
 {
-  if (secondary_stream_ == nullptr)
-  {
-    throw std::runtime_error("Sending script to robot requested while there is no primary interface established. "
-                             "This "
-                             "should not happen.");
-  }
-
-  // urscripts (snippets) must end with a newline, or otherwise the controller's runtime will
-  // not execute them. To avoid problems, we always just append a newline here, even if
-  // there may already be one.
-  auto program_with_newline = program + '\n';
-
-  size_t len = program_with_newline.size();
-  const uint8_t* data = reinterpret_cast<const uint8_t*>(program_with_newline.c_str());
-  size_t written;
-
-  if (secondary_stream_->write(data, len, written))
-  {
-    URCL_LOG_DEBUG("Sent program to robot:\n%s", program_with_newline.c_str());
-    return true;
-  }
-  URCL_LOG_ERROR("Could not send program to robot");
-  return false;
+  return primary_client_.sendScript(program);
 }
 
 bool UrDriver::sendRobotProgram()

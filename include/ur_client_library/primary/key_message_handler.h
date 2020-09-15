@@ -1,8 +1,7 @@
 // this is for emacs file handling -*- mode: c++; indent-tabs-mode: nil -*-
-
+//
 // -- BEGIN LICENSE BLOCK ----------------------------------------------
-// Copyright 2019 FZI Forschungszentrum Informatik
-// Created on behalf of Universal Robots A/S
+// Copyright 2020 FZI Forschungszentrum Informatik
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,28 +20,41 @@
 /*!\file
  *
  * \author  Felix Exner exner@fzi.de
- * \date    2019-06-14
+ * \date    2020-04-30
  *
  */
 //----------------------------------------------------------------------
 
-#include <ur_client_library/ur/calibration_checker.h>
+#ifndef UR_ROBOT_DRIVER_KEY_MESSAGE_HANDLER_H_INCLUDED
+#define UR_ROBOT_DRIVER_KEY_MESSAGE_HANDLER_H_INCLUDED
+
+#include <ur_client_library/log.h>
+#include <ur_client_library/primary/primary_package_handler.h>
+#include <ur_client_library/primary/robot_message/key_message.h>
 
 namespace urcl
 {
-CalibrationChecker::CalibrationChecker(const std::string& expected_hash)
-  : expected_hash_(expected_hash), checked_(false), matches_(false)
+namespace primary_interface
 {
-}
-void CalibrationChecker::handle(primary_interface::KinematicsInfo& kin_info)
+class KeyMessageHandler : public IPrimaryPackageHandler<KeyMessage>
 {
-  auto kin_info = std::dynamic_pointer_cast<primary_interface::KinematicsInfo>(product);
-  if (kin_info != nullptr)
-  {
-    // URCL_LOG_INFO("%s", product->toString().c_str());
-    //
-    matches_ = kin_info->toHash() == expected_hash_;
+public:
+  KeyMessageHandler() = default;
+  virtual ~KeyMessageHandler() = default;
 
-  checked_ = true;
-}
+  /*!
+   * \brief Actual worker function
+   *
+   * \param pkg package that should be handled
+   */
+  virtual void handle(KeyMessage& pkg) override
+  {
+    LOG_INFO("%s", pkg.toString().c_str());
+  }
+
+private:
+  /* data */
+};
+}  // namespace primary_interface
 }  // namespace urcl
+#endif  // ifndef UR_ROBOT_DRIVER_KEY_MESSAGE_HANDLER_H_INCLUDED
