@@ -55,7 +55,7 @@ PrimaryClient::PrimaryClient(const std::string& robot_ip, const std::string& cal
   //{
     //std::this_thread::sleep_for(std::chrono::seconds(1));
   //}
-  //LOG_DEBUG("Got calibration information from robot.");
+  //URCL_LOG_DEBUG("Got calibration information from robot.");
 }
 
 bool PrimaryClient::sendScript(const std::string& script_code)
@@ -77,10 +77,10 @@ bool PrimaryClient::sendScript(const std::string& script_code)
 
   if (stream_->write(data, len, written))
   {
-    LOG_INFO("Sent program to robot:\n%s", program_with_newline.c_str());
+    URCL_LOG_INFO("Sent program to robot:\n%s", program_with_newline.c_str());
     return true;
   }
-  LOG_ERROR("Could not send program to robot");
+  URCL_LOG_ERROR("Could not send program to robot");
   return false;
 }
 

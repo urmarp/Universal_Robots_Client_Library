@@ -144,17 +144,17 @@ public:
       {
         uint64_t timestamp;
         ProgramStateMessageType state_type;
-        LOG_DEBUG("ProgramStateMessage  received");
+        URCL_LOG_DEBUG("ProgramStateMessage  received");
 
         bp.parse(timestamp);
         bp.parse(state_type);
 
-        LOG_DEBUG("ProgramStateMessage of type %d received", static_cast<int>(state_type));
+        URCL_LOG_DEBUG("ProgramStateMessage of type %d received", static_cast<int>(state_type));
 
         std::unique_ptr<PrimaryPackage> packet(programStateFromType(state_type, timestamp));
         if (!packet->parseWith(bp))
         {
-          LOG_ERROR("Package parsing of type %d failed!", static_cast<int>(state_type));
+          URCL_LOG_ERROR("Package parsing of type %d failed!", static_cast<int>(state_type));
           return false;
         }
 

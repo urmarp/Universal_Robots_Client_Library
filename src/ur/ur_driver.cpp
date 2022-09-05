@@ -55,7 +55,7 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
                          std::unique_ptr<ToolCommSetup> tool_comm_setup, const uint32_t reverse_port,
                          const uint32_t script_sender_port, int servoj_gain, double servoj_lookahead_time,
                          bool non_blocking_read, const std::string& reverse_ip, const uint32_t trajectory_port)
-  : primary_client_(robot_ip, calibration_checksum)
+  : primary_client_(robot_ip, "")
   , servoj_time_(0.008)
   , servoj_gain_(servoj_gain)
   , servoj_lookahead_time_(servoj_lookahead_time)
@@ -66,11 +66,11 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
   URCL_LOG_DEBUG("Initializing RTDE client");
   rtde_client_.reset(new rtde_interface::RTDEClient(robot_ip_, notifier_, output_recipe_file, input_recipe_file));
 
-  primary_stream_.reset(
-      new comm::URStream<primary_interface::PrimaryPackage>(robot_ip_, urcl::primary_interface::UR_PRIMARY_PORT));
-  secondary_stream_.reset(
-      new comm::URStream<primary_interface::PrimaryPackage>(robot_ip_, urcl::primary_interface::UR_SECONDARY_PORT));
-  secondary_stream_->connect();
+  // primary_stream_.reset(
+  //     new comm::URStream<primary_interface::PrimaryPackage>(robot_ip_, urcl::primary_interface::UR_PRIMARY_PORT));
+  // secondary_stream_.reset(
+  //     new comm::URStream<primary_interface::PrimaryPackage>(robot_ip_, urcl::primary_interface::UR_SECONDARY_PORT));
+  // secondary_stream_->connect();
 
   non_blocking_read_ = non_blocking_read;
   get_packet_timeout_ = non_blocking_read_ ? 0 : 100;
@@ -182,19 +182,19 @@ urcl::UrDriver::UrDriver(const std::string& robot_ip, const std::string& script_
                 "deprecated. Instead, use the checkCalibration(calibration_checksum) function separately. This "
                 "notice is for application developers using this library. If you are only using an application using "
                 "this library, you can ignore this message.");
-  if (checkCalibration(calibration_checksum))
-  {
-    URCL_LOG_INFO("Calibration checked successfully.");
-  }
-  else
-  {
-    URCL_LOG_ERROR("The calibration parameters of the connected robot don't match the ones from the given kinematics "
-                   "config file. Please be aware that this can lead to critical inaccuracies of tcp positions. Use "
-                   "the ur_calibration tool to extract the correct calibration from the robot and pass that into the "
-                   "description. See "
-                   "[https://github.com/UniversalRobots/Universal_Robots_ROS_Driver#extract-calibration-information] "
-                   "for details.");
-  }
+  // if (checkCalibration(calibration_checksum))
+  // {
+  //   URCL_LOG_INFO("Calibration checked successfully.");
+  // }
+  // else
+  // {
+  //   URCL_LOG_ERROR("The calibration parameters of the connected robot don't match the ones from the given kinematics "
+  //                  "config file. Please be aware that this can lead to critical inaccuracies of tcp positions. Use "
+  //                  "the ur_calibration tool to extract the correct calibration from the robot and pass that into the "
+  //                  "description. See "
+  //                  "[https://github.com/UniversalRobots/Universal_Robots_ROS_Driver#extract-calibration-information] "
+  //                  "for details.");
+  // }
 }
 
 std::unique_ptr<rtde_interface::DataPackage> urcl::UrDriver::getDataPackage()
