@@ -29,54 +29,82 @@
 #include <ur_client_library/comm/producer.h>
 #include <ur_client_library/primary/primary_shell_consumer.h>
 #include <ur_client_library/primary/primary_parser.h>
+#include <ur_client_library/primary/primary_client.h>
 
 using namespace urcl;
 
 // In a real-world example it would be better to get those values from command line parameters / a better configuration
 // system such as Boost.Program_options
-const std::string ROBOT_IP = "172.17.0.2";
+const std::string ROBOT_IP = "10.54.253.220";
 
 int main(int argc, char* argv[])
 {
-  // First of all, we need a stream that connects to the robot
-  comm::URStream<primary_interface::PrimaryPackage> primary_stream(ROBOT_IP, urcl::primary_interface::UR_PRIMARY_PORT);
+  // First of all, we need to create a primary client that connects to the robot
+  primary_interface::PrimaryClient primary_client(ROBOT_IP, "");
 
-  // This will parse the primary packages
-  primary_interface::PrimaryParser parser;
+  // //
 
-  // The producer needs both, the stream and the parser to fully work
-  comm::URProducer<primary_interface::PrimaryPackage> prod(primary_stream, parser);
-  prod.setupProducer();
+  std::stringstream cmd;
+  cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
+  cmd << "sec setup():" << std::endl
+      << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
+      << "end";
 
-  // The shell consumer will print the package contents to the shell
-  std::unique_ptr<comm::IConsumer<primary_interface::PrimaryPackage>> consumer;
-  consumer.reset(new primary_interface::PrimaryShellConsumer());
-
-  // The notifer will be called at some points during connection setup / loss. This isn't fully
-  // implemented atm.
-  comm::INotifier notifier;
-
-  // Now that we have all components, we can create and start the pipeline to run it all.
-  comm::Pipeline<primary_interface::PrimaryPackage> pipeline(prod, consumer.get(), "Pipeline", notifier);
-  pipeline.run();
-
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-
-  std::string script_code = "zero_ftsensor()";
+  std::string script_code = cmd.str();
 
   auto program_with_newline = script_code + '\n';
 
-  size_t len = program_with_newline.size();
-  const uint8_t* data = reinterpret_cast<const uint8_t*>(program_with_newline.c_str());
-  size_t written;
+  std::this_thread::sleep_for(std::chrono::seconds(2));
+  primary_client.sendScript(program_with_newline);
+  std::this_thread::sleep_for(std::chrono::seconds(2));
+  
 
-  primary_stream.write(data, len, written);
+  // First of all, we need a stream that connects to the robot
+  // comm::URStream<primary_interface::PrimaryPackage> primary_stream(ROBOT_IP, urcl::primary_interface::UR_PRIMARY_PORT);
+
+  // // This will parse the primary packages
+  // primary_interface::PrimaryParser parser;
+
+  // // The producer needs both, the stream and the parser to fully work
+  // comm::URProducer<primary_interface::PrimaryPackage> prod(primary_stream, parser);
+  // prod.setupProducer();
+
+  // // The shell consumer will print the package contents to the shell
+  // std::unique_ptr<comm::IConsumer<primary_interface::PrimaryPackage>> consumer;
+  // consumer.reset(new primary_interface::PrimaryShellConsumer());
+
+  // // The notifer will be called at some points during connection setup / loss. This isn't fully
+  // // implemented atm.
+  // comm::INotifier notifier;
+
+  // // Now that we have all components, we can create and start the pipeline to run it all.
+  // comm::Pipeline<primary_interface::PrimaryPackage> pipeline(prod, consumer.get(), "Pipeline", notifier);
+  // pipeline.run();
+
+  // std::this_thread::sleep_for(std::chrono::seconds(2));
+
+  // std::stringstream cmd;
+  // cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
+  // cmd << "sec setup():" << std::endl
+  //     << " set_payload(" << 4 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
+  //     << "end";
+
+  // std::string script_code = cmd.str();
+
+  // auto program_with_newline = script_code + '\n';
+
+  // size_t len = program_with_newline.size();
+  // const uint8_t* data = reinterpret_cast<const uint8_t*>(program_with_newline.c_str());
+  // size_t written;
+
+  // primary_stream.write(data, len, written);
 
   // Package contents will be printed while not being interrupted
   // Note: Packages for which the parsing isn't implemented, will only get their raw bytes printed.
   while (true)
   {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    primary_client.sendScript(program_with_newline);
   }
   return 0;
 }

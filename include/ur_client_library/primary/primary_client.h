@@ -33,6 +33,7 @@
 #include <ur_client_library/comm/pipeline.h>
 #include <ur_client_library/ur/calibration_checker.h>
 #include <ur_client_library/primary/primary_consumer.h>
+#include <ur_client_library/primary/primary_shell_consumer.h>
 
 namespace urcl
 {
@@ -66,7 +67,7 @@ public:
 private:
   std::string robot_ip_;
   PrimaryParser parser_;
-  std::unique_ptr<PrimaryConsumer> consumer_;
+  std::unique_ptr<PrimaryShellConsumer> consumer_;
   comm::INotifier notifier_;
   std::unique_ptr<comm::URProducer<PrimaryPackage>> producer_;
   std::unique_ptr<comm::URStream<PrimaryPackage>> stream_;
