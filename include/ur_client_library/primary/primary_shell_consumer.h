@@ -39,7 +39,7 @@ namespace primary_interface
 class PrimaryShellConsumer : public AbstractPrimaryConsumer
 {
 public:
-  PrimaryShellConsumer() = default;
+  PrimaryShellConsumer() : lastest_error_code_(0){};
   virtual ~PrimaryShellConsumer() = default;
 
   virtual bool consume(RobotMessage& msg) override
@@ -49,11 +49,12 @@ public:
   }
   virtual bool consume(RobotState& msg) override
   {
-    // URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(ErrorCodeMessage& msg) override
   {
+    lastest_error_code_ = msg.message_code_;
     URCL_LOG_INFO("---ErrorCodeMessage---%s", msg.toString().c_str());
     return true;
   }
@@ -93,8 +94,9 @@ public:
     return true;
   }
 
+  int32_t lastest_error_code_;
+
 private:
-  /* data */
 };
 }  // namespace primary_interface
 }  // namespace urcl
