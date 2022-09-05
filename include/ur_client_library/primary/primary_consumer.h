@@ -56,36 +56,36 @@ class PrimaryConsumer : public AbstractPrimaryConsumer
 public:
   PrimaryConsumer()
   {
-    LOG_INFO("Constructing primary consumer");
+    URCL_LOG_INFO("Constructing primary consumer");
     key_message_worker_.reset(new KeyMessageHandler());
     error_code_message_worker_.reset(new ErrorCodeMessageHandler());
-    LOG_INFO("Constructed primary consumer");
+    URCL_LOG_INFO("Constructed primary consumer");
   }
   virtual ~PrimaryConsumer() = default;
 
   virtual bool consume(RobotMessage& msg) override
   {
-    LOG_INFO("---RobotMessage:---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---RobotMessage:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(RobotState& msg) override
   {
-    // LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
+    // URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(RuntimeExceptionMessage& msg) override
   {
-    LOG_INFO("---RuntimeExceptionMessage---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---RuntimeExceptionMessage---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(TextMessage& msg) override
   {
-    LOG_INFO("---TextMessage---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---TextMessage---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(VersionMessage& msg) override
   {
-    LOG_INFO("---VersionMessage---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---VersionMessage---\n%s", msg.toString().c_str());
     return true;
   }
 

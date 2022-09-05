@@ -44,52 +44,52 @@ public:
 
   virtual bool consume(RobotMessage& msg) override
   {
-    LOG_INFO("---RobotMessage:---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---RobotMessage:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(RobotState& msg) override
   {
-    // LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
+    // URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(ErrorCodeMessage& msg) override
   {
-    LOG_INFO("---ErrorCodeMessage---%s", msg.toString().c_str());
+    URCL_LOG_INFO("---ErrorCodeMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(KeyMessage& msg) override
   {
-    LOG_INFO("---KeyMessage---%s", msg.toString().c_str());
+    URCL_LOG_INFO("---KeyMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(RuntimeExceptionMessage& msg) override
   {
-    LOG_INFO("---RuntimeExceptionMessage---%s", msg.toString().c_str());
+    URCL_LOG_INFO("---RuntimeExceptionMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(TextMessage& msg) override
   {
-    LOG_INFO("---TextMessage---%s", msg.toString().c_str());
+    URCL_LOG_INFO("---TextMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(VersionMessage& msg) override
   {
-    LOG_INFO("---VersionMessage---%s", msg.toString().c_str());
+    URCL_LOG_INFO("---VersionMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(KinematicsInfo& msg) override
   {
-    LOG_INFO("%s", msg.toString().c_str());
+    URCL_LOG_INFO("%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(ProgramStateMessage& msg) override
   {
-    LOG_INFO("---ProgramStateMessage---%s", msg.toString().c_str());
+    URCL_LOG_INFO("---ProgramStateMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(GlobalVariablesUpdateMessage& msg) override
   {
-    LOG_INFO("---GlobalVariablesUpdateMessage---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---GlobalVariablesUpdateMessage---\n%s", msg.toString().c_str());
     return true;
   }
 

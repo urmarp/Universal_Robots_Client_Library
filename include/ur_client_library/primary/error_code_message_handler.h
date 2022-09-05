@@ -56,18 +56,18 @@ public:
       case ReportLevel::DEBUG:
       case ReportLevel::DEVL_DEBUG:
       {
-        LOG_DEBUG("%s", out_ss.str().c_str());
+        URCL_LOG_DEBUG("%s", out_ss.str().c_str());
         break;
       }
       case ReportLevel::INFO:
       case ReportLevel::DEVL_INFO:
       {
-        LOG_INFO("%s", out_ss.str().c_str());
+        URCL_LOG_INFO("%s", out_ss.str().c_str());
         break;
       }
       case ReportLevel::WARNING:
       {
-        LOG_WARN("%s", out_ss.str().c_str());
+        URCL_LOG_WARN("%s", out_ss.str().c_str());
         break;
       }
       case ReportLevel::VIOLATION:
@@ -75,14 +75,14 @@ public:
       case ReportLevel::DEVL_VIOLATION:
       case ReportLevel::DEVL_FAULT:
       {
-        LOG_ERROR("%s", out_ss.str().c_str());
+        URCL_LOG_ERROR("%s", out_ss.str().c_str());
         break;
       }
       default:
       {
         std::stringstream ss;
         ss << "Unknown report level: " << static_cast<int>(pkg.report_level_) << std::endl << out_ss.str();
-        LOG_ERROR("%s", ss.str().c_str());
+        URCL_LOG_ERROR("%s", ss.str().c_str());
       }
     }
   }

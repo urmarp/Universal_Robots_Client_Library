@@ -49,7 +49,7 @@ public:
    */
   virtual void handle(KeyMessage& pkg) override
   {
-    LOG_INFO("---KeyMessage---\n%s", pkg.toString().c_str());
+    URCL_LOG_INFO("---KeyMessage---\n%s", pkg.toString().c_str());
   }
 
 private:

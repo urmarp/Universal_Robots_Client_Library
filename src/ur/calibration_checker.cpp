@@ -36,12 +36,9 @@ CalibrationChecker::CalibrationChecker(const std::string& expected_hash)
 }
 void CalibrationChecker::handle(primary_interface::KinematicsInfo& kin_info)
 {
-  auto kin_info = std::dynamic_pointer_cast<primary_interface::KinematicsInfo>(product);
-  if (kin_info != nullptr)
-  {
-    // URCL_LOG_INFO("%s", product->toString().c_str());
-    //
-    matches_ = kin_info->toHash() == expected_hash_;
+  // URCL_LOG_INFO("%s", product->toString().c_str());
+  //
+  matches_ = kin_info.toHash() == expected_hash_;
 
   checked_ = true;
 }
