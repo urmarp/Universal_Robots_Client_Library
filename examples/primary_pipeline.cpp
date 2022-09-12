@@ -35,7 +35,8 @@ using namespace urcl;
 
 // In a real-world example it would be better to get those values from command line parameters / a better configuration
 // system such as Boost.Program_options
-const std::string ROBOT_IP = "10.54.253.220";
+const std::string ROBOT_IP = "10.54.253.16";
+// const std::string ROBOT_IP = "localhost";
 
 int main(int argc, char* argv[])
 {
@@ -47,16 +48,15 @@ int main(int argc, char* argv[])
   std::stringstream cmd;
   cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
   cmd << "sec setup():" << std::endl
-      << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
+      // << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
+      << " textmsg(\"Command through primary interface complete\")" << std::endl
       << "end";
 
   std::string script_code = cmd.str();
 
   auto program_with_newline = script_code + '\n';
 
-  std::this_thread::sleep_for(std::chrono::seconds(2));
-  primary_client.sendScript(program_with_newline);
-  std::this_thread::sleep_for(std::chrono::seconds(2));
+  // primary_client.sendScript(program_with_newline);
   
 
   // First of all, we need a stream that connects to the robot
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
   // std::unique_ptr<comm::IConsumer<primary_interface::PrimaryPackage>> consumer;
   // consumer.reset(new primary_interface::PrimaryShellConsumer());
 
-  // // The notifer will be called at some points during connection setup / loss. This isn't fully
+  // // The notifier will be called at some points during connection setup / loss. This isn't fully
   // // implemented atm.
   // comm::INotifier notifier;
 
@@ -101,9 +101,23 @@ int main(int argc, char* argv[])
 
   // Package contents will be printed while not being interrupted
   // Note: Packages for which the parsing isn't implemented, will only get their raw bytes printed.
+
+  int i = 0;
   while (true)
   {
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    std::stringstream cmd;
+    cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
+    cmd << "sec setup():" << std::endl
+        // << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
+        << " textmsg(\"Command through primary interface complete" << i++ << "\")" << std::endl
+        << "end";
+
+    std::string script_code = cmd.str();
+
+    auto program_with_newline = script_code + '\n';
+
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     primary_client.sendScript(program_with_newline);
   }
   return 0;
