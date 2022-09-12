@@ -39,22 +39,22 @@ namespace primary_interface
 class PrimaryShellConsumer : public AbstractPrimaryConsumer
 {
 public:
-  PrimaryShellConsumer() : lastest_error_code_(0){};
+  PrimaryShellConsumer() : latest_error_code_(0){};
   virtual ~PrimaryShellConsumer() = default;
 
   virtual bool consume(RobotMessage& msg) override
   {
-    URCL_LOG_INFO("---RobotMessage:---\n%s", msg.toString().c_str());
+    // URCL_LOG_INFO("---RobotMessage:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(RobotState& msg) override
   {
-    URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
+    // URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(ErrorCodeMessage& msg) override
   {
-    lastest_error_code_ = msg.message_code_;
+    latest_error_code_ = msg.message_code_;
     URCL_LOG_INFO("---ErrorCodeMessage---%s", msg.toString().c_str());
     return true;
   }
@@ -75,12 +75,12 @@ public:
   }
   virtual bool consume(VersionMessage& msg) override
   {
-    URCL_LOG_INFO("---VersionMessage---%s", msg.toString().c_str());
+    // URCL_LOG_INFO("---VersionMessage---%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(KinematicsInfo& msg) override
   {
-    URCL_LOG_INFO("%s", msg.toString().c_str());
+    // URCL_LOG_INFO("%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(ProgramStateMessage& msg) override
@@ -93,8 +93,12 @@ public:
     URCL_LOG_INFO("---GlobalVariablesUpdateMessage---\n%s", msg.toString().c_str());
     return true;
   }
+  void resetLatestErrorCode()
+  {
+    latest_error_code_ = 0;
+  }
 
-  int32_t lastest_error_code_;
+  int32_t latest_error_code_;
 
 private:
 };

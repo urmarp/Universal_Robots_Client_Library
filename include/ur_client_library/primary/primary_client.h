@@ -64,11 +64,23 @@ public:
    */
   void checkCalibration(const std::string& checksum);
 
+  /*!
+   * \brief Configures the primary client
+   *
+   * Creates a connection to the stream and sets up producer, consumer and pipeline
+   * 
+   * \param robot_ip The ip of the robot
+   * 
+   * \param checksum Hash of the used kinematics information
+   */
+  bool configure(const std::string& robot_ip, const std::string& calibration_checksum);
+
 private:
   std::string robot_ip_;
   PrimaryParser parser_;
-  std::unique_ptr<PrimaryShellConsumer> consumer_;
+  std::unique_ptr<PrimaryConsumer> consumer_;
   comm::INotifier notifier_;
+  bool connected_;
   std::unique_ptr<comm::URProducer<PrimaryPackage>> producer_;
   std::unique_ptr<comm::URStream<PrimaryPackage>> stream_;
   std::unique_ptr<comm::Pipeline<PrimaryPackage>> pipeline_;

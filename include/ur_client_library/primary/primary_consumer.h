@@ -136,6 +136,7 @@ public:
    */
   virtual bool consume(ErrorCodeMessage& pkg) override
   {
+    latest_error_code_ = pkg.message_code_;
     if (error_code_message_worker_ != nullptr)
     {
       error_code_message_worker_->handle(pkg);
@@ -148,7 +149,19 @@ public:
     kinematics_info_message_worker_ = handler;
   }
 
+  void resetLatestErrorCode()
+  {
+    latest_error_code_ = 0;
+  }
+
+  int32_t getLatestErrorCode()
+  {
+    return latest_error_code_;
+  }
+
+
 private:
+  int32_t latest_error_code_;
   std::shared_ptr<IPrimaryPackageHandler<KeyMessage>> key_message_worker_;
   std::shared_ptr<IPrimaryPackageHandler<ErrorCodeMessage>> error_code_message_worker_;
   std::shared_ptr<IPrimaryPackageHandler<KinematicsInfo>> kinematics_info_message_worker_;
