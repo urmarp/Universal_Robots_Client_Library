@@ -303,6 +303,8 @@ public:
       return;
 
     URCL_LOG_DEBUG("Stopping pipeline! <%s>", name_.c_str());
+    URCL_LOG_DEBUG("Producer thread joinable?! <%i>", pThread_.joinable());
+    URCL_LOG_DEBUG("Consumer thread joinable?! <%i>", cThread_.joinable());
 
     running_ = false;
 
@@ -315,6 +317,7 @@ public:
     {
       cThread_.join();
     }
+    URCL_LOG_DEBUG("Joined pipeline threads");
     notifier_.stopped(name_);
   }
 
@@ -427,6 +430,7 @@ private:
     }
     URCL_LOG_DEBUG("Pipeline producer ended! <%s>", name_.c_str());
     notifier_.stopped(name_);
+    URCL_LOG_DEBUG("Notifier producer ended! <%s>", name_.c_str());
   }
 
   void runConsumer()
@@ -454,6 +458,7 @@ private:
     consumer_->stopConsumer();
     URCL_LOG_DEBUG("Pipeline consumer ended! <%s>", name_.c_str());
     notifier_.stopped(name_);
+    URCL_LOG_DEBUG("Notifier consumer ended! <%s>", name_.c_str());
   }
 };
 }  // namespace comm

@@ -58,7 +58,10 @@ void TCPSocket::setOptions(int socket_fd)
 bool TCPSocket::setup(std::string& host, int port)
 {
   if (state_ == SocketState::Connected)
+  {
+    URCL_LOG_DEBUG("Socket already connected");
     return false;
+  }
 
   URCL_LOG_DEBUG("Setting up connection: %s:%d", host.c_str(), port);
 
@@ -207,6 +210,11 @@ void TCPSocket::setReceiveTimeout(const timeval& timeout)
   {
     setOptions(socket_fd_);
   }
+}
+
+void TCPSocket::setDisconnected()
+{
+  state_ = SocketState::Disconnected;
 }
 
 }  // namespace comm

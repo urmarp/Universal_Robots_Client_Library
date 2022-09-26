@@ -80,7 +80,8 @@ public:
   }
   virtual bool consume(TextMessage& msg) override
   {
-    URCL_LOG_INFO("---TextMessage---\n%s", msg.toString().c_str());
+    resetLatestErrorCode();
+    // URCL_LOG_INFO("---TextMessage---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(VersionMessage& msg) override

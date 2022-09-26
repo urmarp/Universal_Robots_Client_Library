@@ -35,7 +35,7 @@ using namespace urcl;
 
 // In a real-world example it would be better to get those values from command line parameters / a better configuration
 // system such as Boost.Program_options
-const std::string ROBOT_IP = "10.54.253.16";
+const std::string ROBOT_IP = "10.54.253.13";
 // const std::string ROBOT_IP = "localhost";
 
 int main(int argc, char* argv[])
@@ -43,18 +43,16 @@ int main(int argc, char* argv[])
   // First of all, we need to create a primary client that connects to the robot
   primary_interface::PrimaryClient primary_client(ROBOT_IP, "");
 
-  // //
+  // std::stringstream cmd;
+  // cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
+  // cmd << "sec setup():" << std::endl
+  //     // << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
+  //     << " textmsg(\"Command through primary interface complete\")" << std::endl
+  //     << "end";
 
-  std::stringstream cmd;
-  cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
-  cmd << "sec setup():" << std::endl
-      // << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
-      << " textmsg(\"Command through primary interface complete\")" << std::endl
-      << "end";
+  // std::string script_code = cmd.str();
 
-  std::string script_code = cmd.str();
-
-  auto program_with_newline = script_code + '\n';
+  // auto program_with_newline = script_code + '\n';
 
   // primary_client.sendScript(program_with_newline);
   
@@ -109,15 +107,14 @@ int main(int argc, char* argv[])
     std::stringstream cmd;
     cmd.imbue(std::locale::classic());  // Make sure, decimal divider is actually '.'
     cmd << "sec setup():" << std::endl
-        // << " set_payload(" << 0.1 << ", [" << 0 << ", " << 0 << ", " << 0 << "])" << std::endl
-        << " textmsg(\"Command through primary interface complete" << i++ << "\")" << std::endl
+        << " textmsg(\"Command through primary interface complete " << i++ << "\")" << std::endl
         << "end";
 
     std::string script_code = cmd.str();
 
     auto program_with_newline = script_code + '\n';
 
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     primary_client.sendScript(program_with_newline);
   }
   return 0;

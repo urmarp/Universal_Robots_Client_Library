@@ -34,6 +34,7 @@
 #include <ur_client_library/ur/calibration_checker.h>
 #include <ur_client_library/primary/primary_consumer.h>
 #include <ur_client_library/primary/primary_shell_consumer.h>
+#include <ur_client_library/ur/dashboard_client.h>
 
 namespace urcl
 {
@@ -44,7 +45,8 @@ class PrimaryClient
 public:
   PrimaryClient() = delete;
   PrimaryClient(const std::string& robot_ip, const std::string& calibration_checksum);
-  virtual ~PrimaryClient() = default;
+  // virtual ~PrimaryClient() = default;
+  virtual ~PrimaryClient();
 
   /*!
    * \brief Sends a custom script program to the robot.
@@ -68,12 +70,22 @@ public:
    * \brief Configures the primary client
    *
    * Creates a connection to the stream and sets up producer, consumer and pipeline
-   * 
-   * \param robot_ip The ip of the robot
-   * 
-   * \param checksum Hash of the used kinematics information
    */
-  bool configure(const std::string& robot_ip, const std::string& calibration_checksum);
+  bool configure();
+
+   /*!
+   * \brief Checks if the robot is in local or remote control
+   *
+   * Checks for package with error code determining if robot is in remote or local control
+   */
+  void checkRemoteLocalControl();
+
+  /*!
+   * \brief Stops the primary client
+   *
+   * Closes the thread checking for remote or local control
+   */
+  void stop();
 
 private:
   std::string robot_ip_;
@@ -81,9 +93,11 @@ private:
   std::unique_ptr<PrimaryConsumer> consumer_;
   comm::INotifier notifier_;
   bool connected_;
+  std::atomic<bool> running_, in_remote_control_;
   std::unique_ptr<comm::URProducer<PrimaryPackage>> producer_;
   std::unique_ptr<comm::URStream<PrimaryPackage>> stream_;
   std::unique_ptr<comm::Pipeline<PrimaryPackage>> pipeline_;
+  std::thread rc_thread_;
 };
 
 }  // namespace primary_interface

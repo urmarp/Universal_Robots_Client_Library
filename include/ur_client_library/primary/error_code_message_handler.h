@@ -56,18 +56,18 @@ public:
       case ReportLevel::DEBUG:
       case ReportLevel::DEVL_DEBUG:
       {
-        URCL_LOG_DEBUG("%s", out_ss.str().c_str());
+        // URCL_LOG_DEBUG("%s", out_ss.str().c_str());
         break;
       }
       case ReportLevel::INFO:
       case ReportLevel::DEVL_INFO:
       {
-        URCL_LOG_INFO("%s", out_ss.str().c_str());
+        // URCL_LOG_INFO("%s", out_ss.str().c_str());
         break;
       }
       case ReportLevel::WARNING:
       {
-        URCL_LOG_WARN("%s", out_ss.str().c_str());
+        // URCL_LOG_WARN("%s", out_ss.str().c_str());
         break;
       }
       case ReportLevel::VIOLATION:
@@ -75,7 +75,7 @@ public:
       case ReportLevel::DEVL_VIOLATION:
       case ReportLevel::DEVL_FAULT:
       {
-        URCL_LOG_ERROR("%s", out_ss.str().c_str());
+        // URCL_LOG_ERROR("%s", out_ss.str().c_str());
         break;
       }
       default:

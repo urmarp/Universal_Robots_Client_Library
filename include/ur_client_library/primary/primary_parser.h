@@ -164,7 +164,7 @@ public:
 
       default:
       {
-        URCL_LOG_DEBUG("Invalid robot package type recieved: %u", static_cast<uint8_t>(type));
+        // URCL_LOG_DEBUG("Invalid robot package type recieved: %u", static_cast<uint8_t>(type));
         bp.consume();
         return true;
       }

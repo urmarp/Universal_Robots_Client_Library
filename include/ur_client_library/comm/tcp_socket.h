@@ -138,6 +138,11 @@ public:
    * \param timeout Timeout used for setting things up
    */
   void setReceiveTimeout(const timeval& timeout);
+
+  /*!
+   * \brief Set SocketState as disconnected
+   */
+  void setDisconnected();
 };
 }  // namespace comm
 }  // namespace urcl

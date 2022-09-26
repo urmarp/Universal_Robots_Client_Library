@@ -27,6 +27,7 @@
 #include <string>
 #include "ur_client_library/log.h"
 #include "ur_client_library/comm/tcp_socket.h"
+#include <iostream>
 
 namespace urcl
 {
@@ -162,6 +163,9 @@ bool URStream<T>::read(uint8_t* buf, const size_t buf_len, size_t& total)
     remainder -= read;
   }
 
+  if (!(remainder == 0))
+    TCPSocket::setDisconnected();
+  
   return remainder == 0;
 }
 }  // namespace comm
