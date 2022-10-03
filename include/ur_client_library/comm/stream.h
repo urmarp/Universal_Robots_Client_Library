@@ -164,7 +164,10 @@ bool URStream<T>::read(uint8_t* buf, const size_t buf_len, size_t& total)
   }
 
   if (!(remainder == 0))
+  {
     TCPSocket::setDisconnected();
+  }
+    
   
   return remainder == 0;
 }

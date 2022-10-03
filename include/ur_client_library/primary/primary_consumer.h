@@ -70,7 +70,7 @@ public:
   }
   virtual bool consume(RobotState& msg) override
   {
-    // URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
+    URCL_LOG_INFO("---RobotState:---\n%s", msg.toString().c_str());
     return true;
   }
   virtual bool consume(RuntimeExceptionMessage& msg) override

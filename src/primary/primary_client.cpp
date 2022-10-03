@@ -121,8 +121,8 @@ bool PrimaryClient::configure()
   URCL_LOG_DEBUG("Reconnecting to stream on %s:%d", robot_ip_.c_str(), UR_PRIMARY_PORT);
   pipeline_->stop();
 
-  // if (stream_->getState() == comm::SocketState::Connected)
-  stream_->disconnect();
+  if (stream_->getState() == comm::SocketState::Connected)
+    stream_->disconnect();
 
   bool res = stream_->connect();
   pipeline_->run();
