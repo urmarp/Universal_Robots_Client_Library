@@ -85,11 +85,11 @@ thread servoThread():
       end
 
       q = extrapolate()
-      servoj(q, t=steptime, {{SERVO_J_REPLACE}})
+      servoj(q, t = steptime, {{SERVO_J_REPLACE}})
 
     elif state == SERVO_RUNNING:
       extrapolate_count = 0
-      servoj(q, t=steptime, {{SERVO_J_REPLACE}})
+      servoj(q, t = steptime, {{SERVO_J_REPLACE}})
     else:
       extrapolate_count = 0
       sync()
@@ -121,29 +121,29 @@ thread jointTrajectoryThread():
   while trajectory_points_left > 0:
     enter_critical
     #reading trajectory point + blend radius + type of point (cartesian/joint based)
-    raw_point = socket_read_binary_integer(TRAJECTORY_DATA_DIMENSION+1+1, "trajectory_socket")
+    raw_point = socket_read_binary_integer(TRAJECTORY_DATA_DIMENSION + 1 + 1, "trajectory_socket")
     trajectory_points_left = trajectory_points_left - 1
     exit_critical
     if raw_point[0] > 0:
-      q = [ raw_point[1] / MULT_jointstate, raw_point[2] / MULT_jointstate, raw_point[3] / MULT_jointstate, raw_point[4] / MULT_jointstate, raw_point[5] / MULT_jointstate, raw_point[6] / MULT_jointstate]
+      q = [raw_point[1] / MULT_jointstate, raw_point[2] / MULT_jointstate, raw_point[3] / MULT_jointstate, raw_point[4] / MULT_jointstate, raw_point[5] / MULT_jointstate, raw_point[6] / MULT_jointstate]
       tmptime = raw_point[7] / MULT_time
       blend_radius = raw_point[8] / MULT_time
 
       if trajectory_points_left > 0:
         if raw_point[9] == TRAJECTORY_POINT_JOINT:
           # textmsg("Executing movej with blending")
-          movej(q, t=tmptime, r=blend_radius)
+          movej(q, t = tmptime, r = blend_radius)
         elif raw_point[9] == TRAJECTORY_POINT_CARTESIAN:
           # textmsg("Executing movel with blending")
-          movel(p[q[0], q[1], q[2], q[3], q[4], q[5]], t=tmptime, r=blend_radius)
+          movel(p[q[0], q[1], q[2], q[3], q[4], q[5]], t = tmptime, r = blend_radius)
         end
       else:
         if raw_point[9] == TRAJECTORY_POINT_JOINT:
           # textmsg("Executing movej without blending")
-          movej(q, t=tmptime, r=0.0)
+          movej(q, t = tmptime, r = 0.0)
         elif raw_point[9] == TRAJECTORY_POINT_CARTESIAN:
           # textmsg("Executing movel without blending")
-          movel(p[q[0], q[1], q[2], q[3], q[4], q[5]], t=tmptime, r=0.0)
+          movel(p[q[0], q[1], q[2], q[3], q[4], q[5]], t = tmptime, r = 0.0)
         end
       end
     end
@@ -154,9 +154,15 @@ end
 
 def clear_remaining_trajectory_points():
   while trajectory_points_left > 0:
-    raw_point = socket_read_binary_integer(TRAJECTORY_DATA_DIMENSION+2, "trajectory_socket")
+    raw_point = socket_read_binary_integer(TRAJECTORY_DATA_DIMENSION + 2, "trajectory_socket")
     trajectory_points_left = trajectory_points_left - 1
   end
+end
+
+thread movejThread():
+  textmsg("Starting movej thread")
+
+  textmsg("movej thread ended")
 end
 
 # Helpers for speed control
@@ -197,11 +203,11 @@ thread servoThreadP():
       end
 
       q = extrapolate()
-      servoj(q, t=steptime, {{SERVO_J_REPLACE}})
+      servoj(q, t = steptime, {{SERVO_J_REPLACE}})
 
     elif state == SERVO_RUNNING:
       extrapolate_count = 0
-      servoj(q, t=steptime, {{SERVO_J_REPLACE}})
+      servoj(q, t = steptime, {{SERVO_J_REPLACE}})
     else:
       extrapolate_count = 0
       sync()
@@ -252,13 +258,13 @@ thread_move = 0
 thread_trajectory = 0
 trajectory_points_left = 0
 global keepalive = -2
-params_mult = socket_read_binary_integer(1+6+1, "reverse_socket", 0)
+params_mult = socket_read_binary_integer(1 + 6 + 1, "reverse_socket", 0)
 textmsg("ExternalControl: External control active")
 keepalive = params_mult[1]
 thread_script_commands = run script_commands()
 while keepalive > 0 and control_mode > MODE_STOPPED:
   enter_critical
-  params_mult = socket_read_binary_integer(1+6+1, "reverse_socket", 0.02) # steptime could work as well, but does not work in simulation
+  params_mult = socket_read_binary_integer(1 + 6 + 1, "reverse_socket", 0.02) # steptime could work as well, but does not work in simulation
   if params_mult[0] > 0:
     keepalive = params_mult[1]
     if control_mode != params_mult[8]:

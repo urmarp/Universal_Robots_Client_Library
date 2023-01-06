@@ -52,6 +52,16 @@ enum class TrajectoryControlMessage : int32_t
 };
 
 /*!
+ * \brief Control messages for starting and stopping movej commands.
+ */
+enum class MovejControlMessage : int32_t
+{
+  MOVEJ_CANCEL = -1,  ///< Represents command to cancel currently active movej command.
+  MOVEJ_NOOP = 0,     ///< Represents no new movej command.
+  MOVEJ_START = 1,    ///< Represents command to start a new movej command.
+};
+
+/*!
  * \brief The ReverseInterface class handles communication to the robot. It starts a server and
  * waits for the robot to connect via its URCaps program.
  */
@@ -96,6 +106,15 @@ public:
   bool writeTrajectoryControlMessage(const TrajectoryControlMessage trajectory_action, const int point_number = 0);
 
   /*!
+   * \brief Writes needed information to the robot to be read by the URScript program.
+   *
+   * \param movej_action 1 if a movej command is to be started, -1 if it should be stopped
+   *
+   * \returns True, if the write was performed successfully, false otherwise.
+   */
+  bool writeMovejControlMessage(const MovejControlMessage movej_action);
+
+  /*!
    * \brief Set the Keepalive count. This will set the number of allowed timeout reads on the robot.
    *
    * \param count Number of allowed timeout reads on the robot.
@@ -126,6 +145,8 @@ protected:
   std::function<void(bool)> handle_program_state_;
   uint32_t keepalive_count_;
 };
+
+static const int MAX_MESSAGE_LENGTH = 8;
 
 }  // namespace control
 }  // namespace urcl

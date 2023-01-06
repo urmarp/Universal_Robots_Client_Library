@@ -114,6 +114,17 @@ bool ReverseInterface::writeTrajectoryControlMessage(const TrajectoryControlMess
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
 }
 
+bool ReverseInterface::writeMovejControlMessage(const MovejControlMessage movej_action);
+{
+  const int message_length = 2;
+  if (client_fd_ == -1)
+  {
+    return false;
+  }
+  uint8_t buffer[sizeof(int32_t) * MAX_MESSAGE_LENGTH];
+  uint8_t* b_pos = buffer;
+}
+
 void ReverseInterface::connectionCallback(const int filedescriptor)
 {
   if (client_fd_ < 0)
