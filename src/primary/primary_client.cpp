@@ -77,7 +77,7 @@ PrimaryClient::PrimaryClient(const std::string& robot_ip, const std::string& cal
   try
   {
     // Check if robot is e-series or not
-    e_series_ = (int)getVersionMessage()->major_version_ > 3;
+    e_series_ = getVersionMessage()->major_version_ > 3;
     if (e_series_)
       startCheckRemoteControlThread();
   }

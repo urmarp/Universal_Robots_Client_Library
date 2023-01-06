@@ -232,7 +232,7 @@ TEST_F(PrimaryClientTest, check_remote_control)
 
   std::unique_ptr<primary_interface::PrimaryClient> temp_client;
   client_.reset(new primary_interface::PrimaryClient(ROBOT_IP, ""));
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // Let connections set up
+  std::this_thread::sleep_for(std::chrono::milliseconds(5000));  // Let connections set up
 
   // Disconnect from URSim servers and connect to fake servers
   client_->pipeline_->stop();
@@ -243,7 +243,7 @@ TEST_F(PrimaryClientTest, check_remote_control)
   client_->stream_->connect();
   client_->dashboard_client_->connect();
   client_->pipeline_->run();
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // let connections set up
+  std::this_thread::sleep_for(std::chrono::milliseconds(5000));  // let connections set up
 
   // When in_remote_control_ is true the primary client should be able to send script
   in_remote_control_ = true;
@@ -252,7 +252,7 @@ TEST_F(PrimaryClientTest, check_remote_control)
 
   // Make sure thread sets in_remote_control_ to false and primary client has time to reconnect
   in_remote_control_ = false;
-  std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+  std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 
   // When in_remote_control_ is false the primary client NOT should be able to send script
   client_->sendScript("false\n");
