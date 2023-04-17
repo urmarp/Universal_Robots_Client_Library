@@ -86,6 +86,18 @@ public:
   virtual bool write(const vector6d_t* positions, const comm::ControlMode control_mode = comm::ControlMode::MODE_IDLE);
 
   /*!
+   * \brief Writes needed information to the robot to be read by the URCaps program.
+   *
+   * \param target_acc A vector of joint targets for the robot
+   * \param friction A vector of friction coefficients
+   * \param control_mode Control mode assigned to this command. See documentation of comm::ControlMode
+   * for details on possible values.
+   *
+   * \returns True, if the write was performed successfully, false otherwise.
+   */
+  virtual bool writeAcc(const vector6d_t* target_acc, const vector6d_t* friction, const comm::ControlMode control_mode = comm::ControlMode::MODE_IDLE);
+
+  /*!
    * \brief Writes needed information to the robot to be read by the URScript program.
    *
    * \param trajectory_action 1 if a trajectory is to be started, -1 if it should be stopped

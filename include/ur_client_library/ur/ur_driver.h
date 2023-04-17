@@ -199,6 +199,18 @@ public:
   bool writeJointCommand(const vector6d_t& values, const comm::ControlMode control_mode);
 
   /*!
+   * \brief Writes a joint command together with a keepalive signal onto the socket being sent to
+   * the robot.
+   *
+   * \param acc Desired acc
+   * \param friction friction compensation
+   * \param control_mode Control mode this command is assigned to.
+   *
+   * \returns True on successful write.
+   */
+  bool writeAccCommand(const vector6d_t& acc, const vector6d_t& friction, const comm::ControlMode control_mode);
+
+  /*!
    * \brief Writes a trajectory point onto the dedicated socket.
    *
    * \param values Desired joint or cartesian positions
