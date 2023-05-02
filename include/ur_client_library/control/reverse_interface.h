@@ -95,7 +95,8 @@ public:
    *
    * \returns True, if the write was performed successfully, false otherwise.
    */
-  virtual bool writeAcc(const vector6d_t* target_acc, const vector6d_t* friction, const comm::ControlMode control_mode = comm::ControlMode::MODE_IDLE);
+  virtual bool writeAcc(const vector6d_t* target_acc, const vector6d_t* friction, const vector6d_t* he,
+                        const comm::ControlMode control_mode = comm::ControlMode::MODE_IDLE);
 
   /*!
    * \brief Writes needed information to the robot to be read by the URScript program.

@@ -221,9 +221,10 @@ bool UrDriver::writeJointCommand(const vector6d_t& values, const comm::ControlMo
   return reverse_interface_->write(&values, control_mode);
 }
 
-bool UrDriver::writeAccCommand(const vector6d_t& acc, const vector6d_t& friction, const comm::ControlMode control_mode)
+bool UrDriver::writeAccCommand(const vector6d_t& acc, const vector6d_t& friction, const vector6d_t& he,
+                               const comm::ControlMode control_mode)
 {
-  return reverse_interface_->writeAcc(&acc, &friction, control_mode);
+  return reverse_interface_->writeAcc(&acc, &friction, &he, control_mode);
 }
 
 bool UrDriver::writeTrajectoryPoint(const vector6d_t& values, const bool cartesian, const float goal_time,

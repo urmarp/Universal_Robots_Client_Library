@@ -50,7 +50,7 @@ bool ReverseInterface::write(const vector6d_t* positions, const comm::ControlMod
   {
     return false;
   }
-  uint8_t buffer[sizeof(int32_t) * 14];
+  uint8_t buffer[sizeof(int32_t) * 20];
   uint8_t* b_pos = buffer;
 
   // The first element is always the keepalive signal.
@@ -81,18 +81,26 @@ bool ReverseInterface::write(const vector6d_t* positions, const comm::ControlMod
     b_pos += append(b_pos, val);
   }
 
+  // writing zeros to allow usage in control loop with other control messages
+  for (size_t i = 0; i < 6; i++)
+  {
+    val = htobe32(0);
+    b_pos += append(b_pos, val);
+  }
+
   size_t written;
 
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
 }
 
-bool ReverseInterface::writeAcc(const vector6d_t* target_acc, const vector6d_t* friction, const comm::ControlMode control_mode)
+bool ReverseInterface::writeAcc(const vector6d_t* target_acc, const vector6d_t* friction, const vector6d_t* he,
+                                const comm::ControlMode control_mode)
 {
   if (client_fd_ == -1)
   {
     return false;
   }
-  uint8_t buffer[sizeof(int32_t) * 14];
+  uint8_t buffer[sizeof(int32_t) * 20];
   uint8_t* b_pos = buffer;
 
   // The first element is always the keepalive signal.
@@ -130,6 +138,23 @@ bool ReverseInterface::writeAcc(const vector6d_t* target_acc, const vector6d_t* 
     b_pos += 6 * sizeof(int32_t);
   }
 
+  val = htobe32(toUnderlying(control_mode));
+  b_pos += append(b_pos, val);
+
+  if (he != nullptr)
+  {
+    for (auto const& external_force : *he)
+    {
+      int32_t val = static_cast<int32_t>(external_force * MULT_JOINTSTATE);
+      val = htobe32(val);
+      b_pos += append(b_pos, val);
+    }
+  }
+  else
+  {
+    b_pos += 6 * sizeof(int32_t);
+  }
+
   size_t written;
 
   return server_.write(client_fd_, buffer, sizeof(buffer), written);
@@ -142,7 +167,7 @@ bool ReverseInterface::writeTrajectoryControlMessage(const TrajectoryControlMess
   {
     return false;
   }
-  uint8_t buffer[sizeof(int32_t) * 14];
+  uint8_t buffer[sizeof(int32_t) * 20];
   uint8_t* b_pos = buffer;
 
   // The first element is always the keepalive signal.
@@ -172,6 +197,12 @@ bool ReverseInterface::writeTrajectoryControlMessage(const TrajectoryControlMess
     b_pos += append(b_pos, val);
   }
 
+  // writing zeros to allow usage in control loop with other control messages
+  for (size_t i = 0; i < 6; i++)
+  {
+    val = htobe32(0);
+    b_pos += append(b_pos, val);
+  }
 
   size_t written;
 

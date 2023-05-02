@@ -205,10 +205,12 @@ public:
    * \param acc Desired acc
    * \param friction friction compensation
    * \param control_mode Control mode this command is assigned to.
+   * \param he Filtered force
    *
    * \returns True on successful write.
    */
-  bool writeAccCommand(const vector6d_t& acc, const vector6d_t& friction, const comm::ControlMode control_mode);
+  bool writeAccCommand(const vector6d_t& acc, const vector6d_t& friction, const vector6d_t& he,
+                       const comm::ControlMode control_mode);
 
   /*!
    * \brief Writes a trajectory point onto the dedicated socket.
